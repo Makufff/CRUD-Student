@@ -18,6 +18,16 @@ export class StudentService {
     return student;
   }
 
+  async getStudentByStudentId(studentId: string) {
+    const student = await this.repository.findByStudentId(studentId);
+
+    if (!student) {
+      throw new Error("ไม่พบข้อมูลนักเรียน รหัสนักเรียน :" + studentId);
+    }
+
+    return student;
+  }
+
   async create_student(data: CreateStudentInput) {
     const existingStudent = await this.repository.findByStudentId(data.studentId);
 

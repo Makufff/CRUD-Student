@@ -55,6 +55,28 @@ export const getStudentById = async (c: Context<AppEnv>) => {
   }
 };
 
+export const getStudentByStudentId = async (c: Context<AppEnv>) => {
+  try {
+    const studentId = c.req.param("studentId");
+
+    if (!studentId || studentId.trim().length === 0) {
+      return c.json({ success: false, message: "Invalid student ID" }, 400);
+    }
+
+    const service = getStudentService(c);
+    const student = await service.getStudentByStudentId(studentId);
+    return c.json({ success: true, data: student });
+  } catch (error) {
+    return c.json(
+      {
+        success: false,
+        message: error instanceof Error ? error.message : "Cannot fetch student",
+      },
+      error instanceof Error && error.message.includes("ไม่พบ") ? 404 : 500,
+    );
+  }
+};
+
 export const createStudent = async (c: Context<AppEnv>) => {
   try {
     const body = await c.req.json().catch(() => null);
