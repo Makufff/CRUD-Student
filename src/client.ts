@@ -1,4 +1,4 @@
-const apiBase = "/students";
+const apiBase = "/api/v1/students";
 
 const $ = (id: string) => document.getElementById(id);
 const $input = (id: string) => document.getElementById(id) as HTMLInputElement | null;

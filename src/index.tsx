@@ -7,7 +7,7 @@ import pageTemplate from "./templates/student-playground.html?raw";
 const app = new Hono<AppEnv>();
 
 app.use(renderer);
-app.route('/students', studentRouter);
+app.route('/api/v1/students', studentRouter);
 
 app.get('/', (c) => {
   const today = new Date().toISOString().slice(0, 10);
