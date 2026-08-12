@@ -7,7 +7,6 @@ const $select = (id: string) => document.getElementById(id) as HTMLSelectElement
 
 const elements = {
   statusBadge: $("status-badge"),
-  responseBox: $("response-box"),
   studentList: $("student-list"),
   refreshButton: $("refresh-button"),
   lookupForm: $form("lookup-form"),
@@ -23,6 +22,12 @@ const elements = {
   updateBirthDate: $input("update-birth-date"),
   updateGender: $select("update-gender"),
   deleteId: $input("delete-id"),
+  resGetAll: $("response-get-all"),
+  resGetById: $("response-get-by-id"),
+  resGetByStudentId: $("response-get-by-student-id"),
+  resPost: $("response-post"),
+  resPut: $("response-put"),
+  resDelete: $("response-delete"),
 };
 
 const escapeHtml = (value: unknown) => String(value)
@@ -46,9 +51,9 @@ const setStatus = (label: string, tone: "success" | "error" | "info" | "neutral"
   elements.statusBadge.textContent = label;
 };
 
-const renderResponse = (payload: unknown) => {
-  if (!elements.responseBox) return;
-  elements.responseBox.textContent = JSON.stringify(payload, null, 2);
+const renderResponse = (box: HTMLElement | null, payload: unknown) => {
+  if (!box) return;
+  box.textContent = JSON.stringify(payload, null, 2);
 };
 
 const api = async (path: string, options: RequestInit = {}) => {
@@ -96,11 +101,12 @@ const loadStudents = async () => {
     setStatus("Loading students...", "info");
     const result = await api("");
     renderStudents(result.data || []);
-    renderResponse(result);
+    renderResponse(elements.resGetAll, result);
     setStatus("Students loaded", "success");
   } catch (error) {
-    renderResponse({ success: false, message: error instanceof Error ? error.message : "Failed to load students" });
-    setStatus(error instanceof Error ? error.message : "Failed to load students", "error");
+    const err = { success: false, message: error instanceof Error ? error.message : "Failed to load students" };
+    renderResponse(elements.resGetAll, err);
+    setStatus(err.message, "error");
   }
 };
 
@@ -175,12 +181,15 @@ function renderStudents(students: any[]) {
       try {
         setStatus(`Deleting student #${id}...`, "info");
         const result = await api(`/${id}`, { method: "DELETE" });
-        renderResponse(result);
+        renderResponse(elements.resDelete, result);
+        const deleteDetails = document.querySelector('#delete') as HTMLDetailsElement | null;
+        if (deleteDetails) deleteDetails.open = true;
         setStatus("Student deleted", "success");
         await loadStudents();
       } catch (error) {
-        renderResponse({ success: false, message: error instanceof Error ? error.message : "Delete failed" });
-        setStatus(error instanceof Error ? error.message : "Delete failed", "error");
+        const err = { success: false, message: error instanceof Error ? error.message : "Delete failed" };
+        renderResponse(elements.resDelete, err);
+        setStatus(err.message, "error");
       }
     });
   });
@@ -197,6 +206,7 @@ const toPayload = (form: FormData, fields: string[]) => {
 
 elements.refreshButton?.addEventListener("click", loadStudents);
 
+// GET /api/v1/students/:id
 elements.lookupForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
   const id = String(elements.lookupInput?.value || "").trim();
@@ -209,19 +219,21 @@ elements.lookupForm?.addEventListener("submit", async (event) => {
   try {
     setStatus(`Fetching student #${id}...`, "info");
     const result = await api(`/${id}`);
-    renderResponse(result);
+    renderResponse(elements.resGetById, result);
     setStatus("Student loaded", "success");
     if (elements.lookupResult) {
       elements.lookupResult.textContent = result.data ? `${result.data.firstName} ${result.data.lastName}` : "No record";
     }
     fillUpdateForm(result.data);
   } catch (error) {
-    renderResponse({ success: false, message: error instanceof Error ? error.message : "Fetch failed" });
-    setStatus(error instanceof Error ? error.message : "Fetch failed", "error");
+    const err = { success: false, message: error instanceof Error ? error.message : "Fetch failed" };
+    renderResponse(elements.resGetById, err);
+    setStatus(err.message, "error");
     if (elements.lookupResult) elements.lookupResult.textContent = "No record";
   }
 });
 
+// GET /api/v1/students/student/:studentId
 const lookupStudentIdForm = $form("lookup-student-id-form");
 const lookupStudentIdInput = $input("lookup-student-id-input");
 const lookupStudentIdResult = $("lookup-student-id-result");
@@ -238,19 +250,21 @@ lookupStudentIdForm?.addEventListener("submit", async (event) => {
   try {
     setStatus(`Fetching student ${studentId}...`, "info");
     const result = await api(`/student/${studentId}`);
-    renderResponse(result);
+    renderResponse(elements.resGetByStudentId, result);
     setStatus("Student loaded", "success");
     if (lookupStudentIdResult) {
       lookupStudentIdResult.textContent = result.data ? `${result.data.firstName} ${result.data.lastName}` : "No record";
     }
     fillUpdateForm(result.data);
   } catch (error) {
-    renderResponse({ success: false, message: error instanceof Error ? error.message : "Fetch failed" });
-    setStatus(error instanceof Error ? error.message : "Fetch failed", "error");
+    const err = { success: false, message: error instanceof Error ? error.message : "Fetch failed" };
+    renderResponse(elements.resGetByStudentId, err);
+    setStatus(err.message, "error");
     if (lookupStudentIdResult) lookupStudentIdResult.textContent = "No record";
   }
 });
 
+// POST /api/v1/students
 elements.createForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
   const form = new FormData(elements.createForm!);
@@ -262,16 +276,18 @@ elements.createForm?.addEventListener("submit", async (event) => {
       method: "POST",
       body: JSON.stringify(payload),
     });
-    renderResponse(result);
+    renderResponse(elements.resPost, result);
     setStatus("Student created", "success");
     elements.createForm?.reset();
     await loadStudents();
   } catch (error) {
-    renderResponse({ success: false, message: error instanceof Error ? error.message : "Create failed" });
-    setStatus(error instanceof Error ? error.message : "Create failed", "error");
+    const err = { success: false, message: error instanceof Error ? error.message : "Create failed" };
+    renderResponse(elements.resPost, err);
+    setStatus(err.message, "error");
   }
 });
 
+// PUT /api/v1/students/:id
 elements.updateForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
   const form = new FormData(elements.updateForm!);
@@ -289,15 +305,17 @@ elements.updateForm?.addEventListener("submit", async (event) => {
       method: "PUT",
       body: JSON.stringify(payload),
     });
-    renderResponse(result);
+    renderResponse(elements.resPut, result);
     setStatus("Student updated", "success");
     await loadStudents();
   } catch (error) {
-    renderResponse({ success: false, message: error instanceof Error ? error.message : "Update failed" });
-    setStatus(error instanceof Error ? error.message : "Update failed", "error");
+    const err = { success: false, message: error instanceof Error ? error.message : "Update failed" };
+    renderResponse(elements.resPut, err);
+    setStatus(err.message, "error");
   }
 });
 
+// DELETE /api/v1/students/:id
 elements.deleteForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
   const id = String(elements.deleteId?.value || "").trim();
@@ -310,13 +328,14 @@ elements.deleteForm?.addEventListener("submit", async (event) => {
   try {
     setStatus(`Deleting student #${id}...`, "info");
     const result = await api(`/${id}`, { method: "DELETE" });
-    renderResponse(result);
+    renderResponse(elements.resDelete, result);
     setStatus("Student deleted", "success");
     elements.deleteForm?.reset();
     await loadStudents();
   } catch (error) {
-    renderResponse({ success: false, message: error instanceof Error ? error.message : "Delete failed" });
-    setStatus(error instanceof Error ? error.message : "Delete failed", "error");
+    const err = { success: false, message: error instanceof Error ? error.message : "Delete failed" };
+    renderResponse(elements.resDelete, err);
+    setStatus(err.message, "error");
   }
 });
 

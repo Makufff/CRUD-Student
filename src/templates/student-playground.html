@@ -47,6 +47,7 @@
   <section class="space-y-3">
     <h2 class="mb-2 text-xs font-semibold uppercase tracking-widest text-base-content/40">Endpoints</h2>
 
+    <!-- ── GET /api/v1/students ── -->
     <details class="endpoint-card method-get rounded-lg bg-base-200/50 ring-1 ring-base-content/8" open>
       <summary class="flex items-center gap-3 rounded-lg px-4 py-3 hover:bg-base-content/5">
         <svg class="chevron h-3 w-3 shrink-0 text-base-content/40" viewBox="0 0 6 10" fill="currentColor"><path d="M1.4 0L0 1.4 3.6 5 0 8.6 1.4 10l5-5z"/></svg>
@@ -84,14 +85,23 @@
             </div>
           </div>
         </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-medium text-base-content/40">Response body</span>
+            <span class="text-xs text-base-content/30 font-mono">application/json</span>
+          </div>
+          <pre id="response-get-all" class="schema-block overflow-auto rounded-lg bg-base-300/40 ring-1 ring-base-content/8 p-4 max-h-60 text-primary/80">{}</pre>
+        </div>
       </div>
     </details>
 
+    <!-- ── GET /api/v1/students/:id ── -->
     <details class="endpoint-card method-get rounded-lg bg-base-200/50 ring-1 ring-base-content/8" id="lookup">
       <summary class="flex items-center gap-3 rounded-lg px-4 py-3 hover:bg-base-content/5">
         <svg class="chevron h-3 w-3 shrink-0 text-base-content/40" viewBox="0 0 6 10" fill="currentColor"><path d="M1.4 0L0 1.4 3.6 5 0 8.6 1.4 10l5-5z"/></svg>
         <span class="method-badge method-badge-get">GET</span>
-        <span class="font-mono text-sm text-base-content/80">/students/<span class="text-primary">{id}</span></span>
+        <span class="font-mono text-sm text-base-content/80">/api/v1/students/<span class="text-primary">{id}</span></span>
         <span class="ml-auto text-xs text-base-content/40">Get student by ID</span>
       </summary>
       <div class="border-t border-base-content/8 px-5 py-4">
@@ -99,7 +109,7 @@
           <div>
             <h3 class="mb-3 text-xs font-semibold uppercase tracking-wider text-base-content/40">Parameters</h3>
             <div class="rounded-lg bg-base-300/30 p-4 ring-1 ring-base-content/5">
-              <div class="param-row">
+              <div class="param-row" style="border-bottom:none">
                 <div>
                   <span class="text-sm font-semibold text-base-content">id</span>
                   <span class="ml-1 text-error text-xs">*</span>
@@ -118,16 +128,23 @@
             <button type="submit" class="btn btn-primary btn-sm">Execute</button>
             <span id="lookup-result" class="text-xs text-base-content/50">No record</span>
           </div>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium text-base-content/40">Response body</span>
+              <span class="text-xs text-base-content/30 font-mono">application/json</span>
+            </div>
+            <pre id="response-get-by-id" class="schema-block overflow-auto rounded-lg bg-base-300/40 ring-1 ring-base-content/8 p-4 max-h-60 text-primary/80">{}</pre>
+          </div>
         </form>
       </div>
     </details>
 
-    <!-- ── GET /students/student/:studentId ── -->
+    <!-- ── GET /api/v1/students/student/:studentId ── -->
     <details class="endpoint-card method-get rounded-lg bg-base-200/50 ring-1 ring-base-content/8" id="lookup-by-student-id">
       <summary class="flex items-center gap-3 rounded-lg px-4 py-3 hover:bg-base-content/5">
         <svg class="chevron h-3 w-3 shrink-0 text-base-content/40" viewBox="0 0 6 10" fill="currentColor"><path d="M1.4 0L0 1.4 3.6 5 0 8.6 1.4 10l5-5z"/></svg>
         <span class="method-badge method-badge-get">GET</span>
-        <span class="font-mono text-sm text-base-content/80">/students/student/<span class="text-primary">{studentId}</span></span>
+        <span class="font-mono text-sm text-base-content/80">/api/v1/students/student/<span class="text-primary">{studentId}</span></span>
         <span class="ml-auto text-xs text-base-content/40">Get student by student ID</span>
       </summary>
       <div class="border-t border-base-content/8 px-5 py-4">
@@ -154,10 +171,18 @@
             <button type="submit" class="btn btn-primary btn-sm">Execute</button>
             <span id="lookup-student-id-result" class="text-xs text-base-content/50">No record</span>
           </div>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium text-base-content/40">Response body</span>
+              <span class="text-xs text-base-content/30 font-mono">application/json</span>
+            </div>
+            <pre id="response-get-by-student-id" class="schema-block overflow-auto rounded-lg bg-base-300/40 ring-1 ring-base-content/8 p-4 max-h-60 text-primary/80">{}</pre>
+          </div>
         </form>
       </div>
     </details>
 
+    <!-- ── POST /api/v1/students ── -->
     <details class="endpoint-card method-post rounded-lg bg-base-200/50 ring-1 ring-base-content/8" id="create">
       <summary class="flex items-center gap-3 rounded-lg px-4 py-3 hover:bg-base-content/5">
         <svg class="chevron h-3 w-3 shrink-0 text-base-content/40" viewBox="0 0 6 10" fill="currentColor"><path d="M1.4 0L0 1.4 3.6 5 0 8.6 1.4 10l5-5z"/></svg>
@@ -232,15 +257,23 @@
             </div>
           </div>
           <button type="submit" class="btn btn-success btn-sm">Execute</button>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium text-base-content/40">Response body</span>
+              <span class="text-xs text-base-content/30 font-mono">application/json</span>
+            </div>
+            <pre id="response-post" class="schema-block overflow-auto rounded-lg bg-base-300/40 ring-1 ring-base-content/8 p-4 max-h-60 text-primary/80">{}</pre>
+          </div>
         </form>
       </div>
     </details>
 
+    <!-- ── PUT /api/v1/students/:id ── -->
     <details class="endpoint-card method-put rounded-lg bg-base-200/50 ring-1 ring-base-content/8" id="update">
       <summary class="flex items-center gap-3 rounded-lg px-4 py-3 hover:bg-base-content/5">
         <svg class="chevron h-3 w-3 shrink-0 text-base-content/40" viewBox="0 0 6 10" fill="currentColor"><path d="M1.4 0L0 1.4 3.6 5 0 8.6 1.4 10l5-5z"/></svg>
         <span class="method-badge method-badge-put">PUT</span>
-        <span class="font-mono text-sm text-base-content/80">/students/<span class="text-warning">{id}</span></span>
+        <span class="font-mono text-sm text-base-content/80">/api/v1/students/<span class="text-warning">{id}</span></span>
         <span class="ml-auto text-xs text-base-content/40">Update a student</span>
       </summary>
       <div class="border-t border-base-content/8 px-5 py-4">
@@ -316,15 +349,23 @@
             </div>
           </div>
           <button type="submit" class="btn btn-warning btn-sm">Execute</button>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium text-base-content/40">Response body</span>
+              <span class="text-xs text-base-content/30 font-mono">application/json</span>
+            </div>
+            <pre id="response-put" class="schema-block overflow-auto rounded-lg bg-base-300/40 ring-1 ring-base-content/8 p-4 max-h-60 text-primary/80">{}</pre>
+          </div>
         </form>
       </div>
     </details>
 
+    <!-- ── DELETE /api/v1/students/:id ── -->
     <details class="endpoint-card method-delete rounded-lg bg-base-200/50 ring-1 ring-base-content/8" id="delete">
       <summary class="flex items-center gap-3 rounded-lg px-4 py-3 hover:bg-base-content/5">
         <svg class="chevron h-3 w-3 shrink-0 text-base-content/40" viewBox="0 0 6 10" fill="currentColor"><path d="M1.4 0L0 1.4 3.6 5 0 8.6 1.4 10l5-5z"/></svg>
         <span class="method-badge method-badge-delete">DELETE</span>
-        <span class="font-mono text-sm text-base-content/80">/students/<span class="text-error">{id}</span></span>
+        <span class="font-mono text-sm text-base-content/80">/api/v1/students/<span class="text-error">{id}</span></span>
         <span class="ml-auto text-xs text-base-content/40">Delete a student</span>
       </summary>
       <div class="border-t border-base-content/8 px-5 py-4">
@@ -346,24 +387,19 @@
             </div>
           </div>
           <button type="submit" class="btn btn-error btn-sm">Execute</button>
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-medium text-base-content/40">Response body</span>
+              <span class="text-xs text-base-content/30 font-mono">application/json</span>
+            </div>
+            <pre id="response-delete" class="schema-block overflow-auto rounded-lg bg-base-300/40 ring-1 ring-base-content/8 p-4 max-h-60 text-primary/80">{}</pre>
+          </div>
         </form>
       </div>
     </details>
   </section>
 
-  <section class="mt-6">
-    <div class="flex items-center justify-between mb-2">
-      <h2 class="text-xs font-semibold uppercase tracking-widest text-base-content/40">Server Response</h2>
-      <span class="text-xs text-base-content/30 font-mono">application/json</span>
-    </div>
-    <div class="rounded-lg bg-base-300/40 ring-1 ring-base-content/8 overflow-hidden">
-      <div class="flex items-center justify-between border-b border-base-content/8 px-4 py-2">
-        <span class="text-xs font-medium text-base-content/50">Response body</span>
-      </div>
-      <pre id="response-box" class="schema-block overflow-auto p-4 max-h-80 text-primary/80">{}</pre>
-    </div>
-  </section>
-
+  <!-- ─── Schema ─── -->
   <section class="mt-6 mb-10">
     <h2 class="mb-2 text-xs font-semibold uppercase tracking-widest text-base-content/40">Schema</h2>
     <div class="rounded-lg bg-base-300/40 ring-1 ring-base-content/8 overflow-hidden">
