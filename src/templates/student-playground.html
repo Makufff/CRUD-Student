@@ -122,6 +122,42 @@
       </div>
     </details>
 
+    <!-- ── GET /students/student/:studentId ── -->
+    <details class="endpoint-card method-get rounded-lg bg-base-200/50 ring-1 ring-base-content/8" id="lookup-by-student-id">
+      <summary class="flex items-center gap-3 rounded-lg px-4 py-3 hover:bg-base-content/5">
+        <svg class="chevron h-3 w-3 shrink-0 text-base-content/40" viewBox="0 0 6 10" fill="currentColor"><path d="M1.4 0L0 1.4 3.6 5 0 8.6 1.4 10l5-5z"/></svg>
+        <span class="method-badge method-badge-get">GET</span>
+        <span class="font-mono text-sm text-base-content/80">/students/student/<span class="text-primary">{studentId}</span></span>
+        <span class="ml-auto text-xs text-base-content/40">Get student by student ID</span>
+      </summary>
+      <div class="border-t border-base-content/8 px-5 py-4">
+        <form id="lookup-student-id-form" class="space-y-4">
+          <div>
+            <h3 class="mb-3 text-xs font-semibold uppercase tracking-wider text-base-content/40">Parameters</h3>
+            <div class="rounded-lg bg-base-300/30 p-4 ring-1 ring-base-content/5">
+              <div class="param-row" style="border-bottom:none">
+                <div>
+                  <span class="text-sm font-semibold text-base-content">studentId</span>
+                  <span class="ml-1 text-error text-xs">*</span>
+                  <div class="text-xs text-base-content/40 mt-0.5">string</div>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-xs text-base-content/50">Student code (e.g. STD-001)</div>
+                  <input id="lookup-student-id-input" name="studentId" type="text"
+                    class="input input-sm input-bordered w-full max-w-xs bg-base-300/50 font-mono"
+                    placeholder="STD-001" required />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <button type="submit" class="btn btn-primary btn-sm">Execute</button>
+            <span id="lookup-student-id-result" class="text-xs text-base-content/50">No record</span>
+          </div>
+        </form>
+      </div>
+    </details>
+
     <details class="endpoint-card method-post rounded-lg bg-base-200/50 ring-1 ring-base-content/8" id="create">
       <summary class="flex items-center gap-3 rounded-lg px-4 py-3 hover:bg-base-content/5">
         <svg class="chevron h-3 w-3 shrink-0 text-base-content/40" viewBox="0 0 6 10" fill="currentColor"><path d="M1.4 0L0 1.4 3.6 5 0 8.6 1.4 10l5-5z"/></svg>

@@ -222,6 +222,35 @@ elements.lookupForm?.addEventListener("submit", async (event) => {
   }
 });
 
+const lookupStudentIdForm = $form("lookup-student-id-form");
+const lookupStudentIdInput = $input("lookup-student-id-input");
+const lookupStudentIdResult = $("lookup-student-id-result");
+
+lookupStudentIdForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const studentId = String(lookupStudentIdInput?.value || "").trim();
+
+  if (!studentId) {
+    setStatus("Enter a student ID to fetch", "error");
+    return;
+  }
+
+  try {
+    setStatus(`Fetching student ${studentId}...`, "info");
+    const result = await api(`/student/${studentId}`);
+    renderResponse(result);
+    setStatus("Student loaded", "success");
+    if (lookupStudentIdResult) {
+      lookupStudentIdResult.textContent = result.data ? `${result.data.firstName} ${result.data.lastName}` : "No record";
+    }
+    fillUpdateForm(result.data);
+  } catch (error) {
+    renderResponse({ success: false, message: error instanceof Error ? error.message : "Fetch failed" });
+    setStatus(error instanceof Error ? error.message : "Fetch failed", "error");
+    if (lookupStudentIdResult) lookupStudentIdResult.textContent = "No record";
+  }
+});
+
 elements.createForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
   const form = new FormData(elements.createForm!);
