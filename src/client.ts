@@ -1,23 +1,28 @@
 const apiBase = "/students";
 
+const $ = (id: string) => document.getElementById(id);
+const $input = (id: string) => document.getElementById(id) as HTMLInputElement | null;
+const $form = (id: string) => document.getElementById(id) as HTMLFormElement | null;
+const $select = (id: string) => document.getElementById(id) as HTMLSelectElement | null;
+
 const elements = {
-  statusBadge: document.getElementById("status-badge"),
-  responseBox: document.getElementById("response-box"),
-  studentList: document.getElementById("student-list"),
-  refreshButton: document.getElementById("refresh-button"),
-  lookupForm: document.getElementById("lookup-form"),
-  lookupInput: document.getElementById("lookup-id"),
-  lookupResult: document.getElementById("lookup-result"),
-  createForm: document.getElementById("create-form"),
-  updateForm: document.getElementById("update-form"),
-  deleteForm: document.getElementById("delete-form"),
-  updateId: document.getElementById("update-id"),
-  updateStudentId: document.getElementById("update-student-id"),
-  updateFirstName: document.getElementById("update-first-name"),
-  updateLastName: document.getElementById("update-last-name"),
-  updateBirthDate: document.getElementById("update-birth-date"),
-  updateGender: document.getElementById("update-gender"),
-  deleteId: document.getElementById("delete-id"),
+  statusBadge: $("status-badge"),
+  responseBox: $("response-box"),
+  studentList: $("student-list"),
+  refreshButton: $("refresh-button"),
+  lookupForm: $form("lookup-form"),
+  lookupInput: $input("lookup-id"),
+  lookupResult: $("lookup-result"),
+  createForm: $form("create-form"),
+  updateForm: $form("update-form"),
+  deleteForm: $form("delete-form"),
+  updateId: $input("update-id"),
+  updateStudentId: $input("update-student-id"),
+  updateFirstName: $input("update-first-name"),
+  updateLastName: $input("update-last-name"),
+  updateBirthDate: $input("update-birth-date"),
+  updateGender: $select("update-gender"),
+  deleteId: $input("delete-id"),
 };
 
 const escapeHtml = (value: unknown) => String(value)
@@ -194,7 +199,7 @@ elements.refreshButton?.addEventListener("click", loadStudents);
 
 elements.lookupForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const id = String((elements.lookupInput as HTMLInputElement | null)?.value || "").trim();
+  const id = String(elements.lookupInput?.value || "").trim();
 
   if (!id) {
     setStatus("Enter an ID to fetch", "error");
@@ -219,7 +224,7 @@ elements.lookupForm?.addEventListener("submit", async (event) => {
 
 elements.createForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const form = new FormData(elements.createForm as HTMLFormElement);
+  const form = new FormData(elements.createForm!);
 
   try {
     setStatus("Creating student...", "info");
@@ -230,7 +235,7 @@ elements.createForm?.addEventListener("submit", async (event) => {
     });
     renderResponse(result);
     setStatus("Student created", "success");
-    (elements.createForm as HTMLFormElement).reset();
+    elements.createForm?.reset();
     await loadStudents();
   } catch (error) {
     renderResponse({ success: false, message: error instanceof Error ? error.message : "Create failed" });
@@ -240,7 +245,7 @@ elements.createForm?.addEventListener("submit", async (event) => {
 
 elements.updateForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const form = new FormData(elements.updateForm as HTMLFormElement);
+  const form = new FormData(elements.updateForm!);
   const id = String(form.get("id") || "").trim();
 
   if (!id) {
@@ -266,7 +271,7 @@ elements.updateForm?.addEventListener("submit", async (event) => {
 
 elements.deleteForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const id = String((elements.deleteId as HTMLInputElement | null)?.value || "").trim();
+  const id = String(elements.deleteId?.value || "").trim();
 
   if (!id) {
     setStatus("Enter an ID to delete", "error");
@@ -278,7 +283,7 @@ elements.deleteForm?.addEventListener("submit", async (event) => {
     const result = await api(`/${id}`, { method: "DELETE" });
     renderResponse(result);
     setStatus("Student deleted", "success");
-    (elements.deleteForm as HTMLFormElement).reset();
+    elements.deleteForm?.reset();
     await loadStudents();
   } catch (error) {
     renderResponse({ success: false, message: error instanceof Error ? error.message : "Delete failed" });
