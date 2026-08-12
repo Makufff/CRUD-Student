@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { raw } from "hono/html";
 import { renderer } from "./renderer";
 import { studentRouter } from "./routes/student.routes";
 import type { AppEnv } from "./types/env";
@@ -11,7 +12,7 @@ app.route('/api/v1/students', studentRouter);
 
 app.get('/', (c) => {
   const today = new Date().toISOString().slice(0, 10);
-  return c.html(pageTemplate.replaceAll("__TODAY__", today));
+  return c.render(raw(pageTemplate.replaceAll("__TODAY__", today)));
 });
 
 export default app;
